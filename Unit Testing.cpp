@@ -55,7 +55,7 @@ public:
 
 int main() {
     Player p("Alex", 100, 5);  
-    p.showStatus();            
+    p.showStatus();
     p.attack();                
     p.takeDamage(20);          
     p.castSpell();             

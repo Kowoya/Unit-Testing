@@ -124,6 +124,40 @@ TEST_CASE("Enemy survives small damage", "[Enemy]") {
     Enemy e("Demon", 40);
     e.takeDamage(5);
     REQUIRE(e.getHealth() == 35);
+} 
+
+//MIXED/ GENERAL TESTS
+
+TEST_CASE("Player and Enemy both take damage", "[Mixed]") {
+    Player p("Alex", 100, 5);
+    Enemy e("Demon", 100);
+
+    p.takeDamage(20);
+    e.takeDamage(50);
+
+    REQUIRE(p.getHealth() == 80);
+    REQUIRE(e.getHealth() == 50);
+}
+
+TEST_CASE("Both Player and Enemy can attack", "[Mixed]") {
+    Player p("Alex", 100, 10);
+    Enemy e("Ghoul", 100);
+
+    p.attack();
+    e.attack();
+    REQUIRE(p.getHealth() == 100);
+    REQUIRE(e.getHealth() == 100);
+}
+
+TEST_CASE("Multiple players handle independent damage", "[Player]") {
+    Player p1("Alex", 100, 5);
+    Player p2("Sam", 120, 0);
+
+    p1.takeDamage(20);
+    p2.takeDamage(40);
+
+    REQUIRE(p1.getHealth() == 80);
+    REQUIRE(p2.getHealth() == 80);
 }
 
 

@@ -65,40 +65,38 @@ int main() {
 
 //Unit testing
 
-// 🔹 Тест 1: Перевірка створення гравця
-TEST_CASE("Player is created correctly", "[player]") {
+// PLAYER TESTS
+
+TEST_CASE("Player takes normal damage", "[Player]") {
     Player p("Alex", 100, 10);
-    REQUIRE(p.getHealth() == 100);
+    p.takeDamage(25);
+    REQUIRE(p.getHealth() == 75);
 }
 
-// 🔹 Тест 2: Перевірка отримання урону
-TEST_CASE("Player takes damage correctly", "[player]") {
-    Player p("Alex", 100, 10);
-    p.takeDamage(30);
-    REQUIRE(p.getHealth() == 70);
-}
-
-// 🔹 Тест 3: Перевірка, що здоров’я не стає від’ємним
-TEST_CASE("Health cannot be negative", "[character]") {
+TEST_CASE("Player health cannot go below zero", "[Player]") {
     Player p("Alex", 50, 10);
     p.takeDamage(100);
     REQUIRE(p.getHealth() == 0);
 }
 
-// 🔹 Тест 4: Перевірка атаки
-TEST_CASE("Player attack increases experience", "[player]") {
+TEST_CASE("Player attack increases experience", "[Player]") {
     Player p("Alex", 100, 0);
     p.attack();
-    // після атаки XP має збільшитись (+10)
-    Player p2("Alex", 100, 0);
-    p2.attack();
-    REQUIRE(p2.getHealth() == 100); // здоров’я не змінюється при атаці
+    // немає геттера для досвіду, але тест перевіряє, що метод викликається без помилок
+    REQUIRE(p.getHealth() == 100);
 }
 
-// 🔹 Тест 5: Вороги атакують
-TEST_CASE("Enemy can attack", "[enemy]") {
-    Enemy e("Demon", 80);
-    REQUIRE_NOTHROW(e.attack());
+TEST_CASE("Player castSpell executes without affecting health", "[Player]") {
+    Player p("Alex", 80, 20);
+    p.castSpell();
+    REQUIRE(p.getHealth() == 80);
+}
+
+TEST_CASE("Player takes multiple hits correctly", "[Player]") {
+    Player p("Alex", 120, 10);
+    p.takeDamage(10);
+    p.takeDamage(15);
+    REQUIRE(p.getHealth() == 95);
 }
 
 

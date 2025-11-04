@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #define CATCH_CONFIG_MAIN
 #include "catch_amalgamated.hpp"
+
 using namespace std;
 
 // Базовий клас
@@ -97,6 +98,32 @@ TEST_CASE("Player takes multiple hits correctly", "[Player]") {
     p.takeDamage(10);
     p.takeDamage(15);
     REQUIRE(p.getHealth() == 95);
+}
+
+// ENEMY TESTS
+
+TEST_CASE("Enemy attack executes", "[Enemy]") {
+    Enemy e("Demon", 60);
+    e.attack();
+    REQUIRE(e.getHealth() == 60);
+}
+
+TEST_CASE("Enemy takes damage correctly", "[Enemy]") {
+    Enemy e("Demon", 70);
+    e.takeDamage(40);
+    REQUIRE(e.getHealth() == 30);
+}
+
+TEST_CASE("Enemy health cannot be negative", "[Enemy]") {
+    Enemy e("Demon", 10);
+    e.takeDamage(999);
+    REQUIRE(e.getHealth() == 0);
+}
+
+TEST_CASE("Enemy survives small damage", "[Enemy]") {
+    Enemy e("Demon", 40);
+    e.takeDamage(5);
+    REQUIRE(e.getHealth() == 35);
 }
 
 

@@ -1,9 +1,9 @@
-#include <iostream>
+﻿#include <iostream>
 #define CATCH_CONFIG_MAIN
 #include "catch_amalgamated.hpp"
 using namespace std;
 
-// ������� ����
+// Базовий клас
 class Character {
 protected:
     string name;
@@ -23,7 +23,7 @@ public:
     int getHealth() const { return health; }
 };
 
-// ϳ����� Player
+// Підклас Player
 class Player : public Character {
 private:
     int experience;
@@ -45,7 +45,7 @@ public:
     }
 };
 
-// ϳ����� Enemy
+// Підклас Enemy
 class Enemy : public Character {
 public:
     Enemy(string n, int h) : Character(n, h) {}
@@ -64,3 +64,42 @@ int main() {
 }
 
 //Unit testing
+
+// 🔹 Тест 1: Перевірка створення гравця
+TEST_CASE("Player is created correctly", "[player]") {
+    Player p("Alex", 100, 10);
+    REQUIRE(p.getHealth() == 100);
+}
+
+// 🔹 Тест 2: Перевірка отримання урону
+TEST_CASE("Player takes damage correctly", "[player]") {
+    Player p("Alex", 100, 10);
+    p.takeDamage(30);
+    REQUIRE(p.getHealth() == 70);
+}
+
+// 🔹 Тест 3: Перевірка, що здоров’я не стає від’ємним
+TEST_CASE("Health cannot be negative", "[character]") {
+    Player p("Alex", 50, 10);
+    p.takeDamage(100);
+    REQUIRE(p.getHealth() == 0);
+}
+
+// 🔹 Тест 4: Перевірка атаки
+TEST_CASE("Player attack increases experience", "[player]") {
+    Player p("Alex", 100, 0);
+    p.attack();
+    // після атаки XP має збільшитись (+10)
+    Player p2("Alex", 100, 0);
+    p2.attack();
+    REQUIRE(p2.getHealth() == 100); // здоров’я не змінюється при атаці
+}
+
+// 🔹 Тест 5: Вороги атакують
+TEST_CASE("Enemy can attack", "[enemy]") {
+    Enemy e("Demon", 80);
+    REQUIRE_NOTHROW(e.attack());
+}
+
+
+

@@ -1,4 +1,6 @@
 #include <iostream>
+#define CATCH_CONFIG_MAIN
+#include "catch_amalgamated.hpp"
 using namespace std;
 
 // Базовий клас
@@ -10,7 +12,7 @@ protected:
 public:
     Character(string n, int h) : name(n), health(h) {}
 
-    virtual void attack() = 0; 
+    virtual void attack() = 0;
 
     void takeDamage(int amount) {
         health -= amount;
@@ -55,8 +57,10 @@ public:
 
 int main() {
     Player p("Alex", 100, 5);  
-    p.showStatus();
+    p.showStatus();            
     p.attack();                
     p.takeDamage(20);          
     p.castSpell();             
 }
+
+//Unit testing

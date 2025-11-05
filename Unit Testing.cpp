@@ -66,6 +66,32 @@ int main() {
 
 //Unit testing
 
+// CHARACTER TESTS
+
+class TestCharacter : public Character {
+public:
+    TestCharacter(string n, int h) : Character(n, h) {}
+    void attack() override { cout << name << " performs test attack.\n"; }
+};
+
+TEST_CASE("Character takes damage", "[Character]") {
+    TestCharacter c("Test", 100);
+    c.takeDamage(30);
+    REQUIRE(c.getHealth() == 70);
+}
+
+TEST_CASE("Character cannot have negative health", "[Character]") {
+    TestCharacter c("Test", 50);
+    c.takeDamage(100);
+    REQUIRE(c.getHealth() == 0);
+}
+
+TEST_CASE("Character with zero health stays zero", "[Character]") {
+    TestCharacter c("Test", 0);
+    c.takeDamage(10);
+    REQUIRE(c.getHealth() == 0);
+}
+
 // PLAYER TESTS
 
 TEST_CASE("Player takes normal damage", "[Player]") {

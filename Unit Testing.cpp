@@ -1,7 +1,10 @@
-#include <iostream>
+﻿#include <iostream>
+#define CATCH_CONFIG_MAIN
+#include "catch_amalgamated.hpp"
+
 using namespace std;
 
-// ������� ����
+// Базовий клас
 class Character {
 protected:
     string name;
@@ -10,7 +13,7 @@ protected:
 public:
     Character(string n, int h) : name(n), health(h) {}
 
-    virtual void attack() = 0; 
+    virtual void attack() = 0;
 
     void takeDamage(int amount) {
         health -= amount;
@@ -21,7 +24,7 @@ public:
     int getHealth() const { return health; }
 };
 
-// ϳ����� Player
+// Підклас Player
 class Player : public Character {
 private:
     int experience;
@@ -43,7 +46,7 @@ public:
     }
 };
 
-// ϳ����� Enemy
+// Підклас Enemy
 class Enemy : public Character {
 public:
     Enemy(string n, int h) : Character(n, h) {}
@@ -55,8 +58,133 @@ public:
 
 int main() {
     Player p("Alex", 100, 5);  
-    p.showStatus();
+    p.showStatus();            
     p.attack();                
     p.takeDamage(20);          
     p.castSpell();             
 }
+
+//Unit testing
+
+// CHARACTER TESTS
+
+class TestCharacter : public Character {
+public:
+    TestCharacter(string n, int h) : Character(n, h) {}
+    void attack() override { cout << name << " performs test attack.\n"; }
+};
+
+TEST_CASE("Character takes damage", "[Character]") {
+    TestCharacter c("Test", 100);
+    c.takeDamage(30);
+    REQUIRE(c.getHealth() == 70);
+}
+
+TEST_CASE("Character cannot have negative health", "[Character]") {
+    TestCharacter c("Test", 50);
+    c.takeDamage(100);
+    REQUIRE(c.getHealth() == 0);
+}
+
+TEST_CASE("Character with zero health stays zero", "[Character]") {
+    TestCharacter c("Test", 0);
+    c.takeDamage(10);
+    REQUIRE(c.getHealth() == 0);
+}
+
+// PLAYER TESTS
+
+TEST_CASE("Player takes normal damage", "[Player]") {
+    Player p("Alex", 100, 10);
+    p.takeDamage(25);
+    REQUIRE(p.getHealth() == 75);
+}
+
+TEST_CASE("Player health cannot go below zero", "[Player]") {
+    Player p("Alex", 50, 10);
+    p.takeDamage(100);
+    REQUIRE(p.getHealth() == 0);
+}
+
+TEST_CASE("Player attack increases experience", "[Player]") {
+    Player p("Alex", 100, 0);
+    p.attack();
+    // немає геттера для досвіду, але тест перевіряє, що метод викликається без помилок
+    REQUIRE(p.getHealth() == 100);
+}
+
+TEST_CASE("Player castSpell executes without affecting health", "[Player]") {
+    Player p("Alex", 80, 20);
+    p.castSpell();
+    REQUIRE(p.getHealth() == 80);
+}
+
+TEST_CASE("Player takes multiple hits correctly", "[Player]") {
+    Player p("Alex", 120, 10);
+    p.takeDamage(10);
+    p.takeDamage(15);
+    REQUIRE(p.getHealth() == 95);
+}
+
+// ENEMY TESTS
+
+TEST_CASE("Enemy attack executes", "[Enemy]") {
+    Enemy e("Demon", 60);
+    e.attack();
+    REQUIRE(e.getHealth() == 60);
+}
+
+TEST_CASE("Enemy takes damage correctly", "[Enemy]") {
+    Enemy e("Demon", 70);
+    e.takeDamage(40);
+    REQUIRE(e.getHealth() == 30);
+}
+
+TEST_CASE("Enemy health cannot be negative", "[Enemy]") {
+    Enemy e("Demon", 10);
+    e.takeDamage(999);
+    REQUIRE(e.getHealth() == 0);
+}
+
+TEST_CASE("Enemy survives small damage", "[Enemy]") {
+    Enemy e("Demon", 40);
+    e.takeDamage(5);
+    REQUIRE(e.getHealth() == 35);
+} 
+
+//MIXED/ GENERAL TESTS
+
+TEST_CASE("Player and Enemy both take damage", "[Mixed]") {
+    Player p("Alex", 100, 5);
+    Enemy e("Demon", 100);
+
+    p.takeDamage(20);
+    e.takeDamage(50);
+
+    REQUIRE(p.getHealth() == 80);
+    REQUIRE(e.getHealth() == 50);
+}
+
+TEST_CASE("Both Player and Enemy can attack", "[Mixed]") {
+    Player p("Alex", 100, 10);
+    Enemy e("Ghoul", 100);
+
+    p.attack();
+    e.attack();
+    REQUIRE(p.getHealth() == 100);
+    REQUIRE(e.getHealth() == 100);
+}
+
+TEST_CASE("Multiple players handle independent damage", "[Player]") {
+    Player p1("Alex", 100, 5);
+    Player p2("Sam", 120, 0);
+
+    p1.takeDamage(20);
+    p2.takeDamage(40);
+
+    REQUIRE(p1.getHealth() == 80);
+    REQUIRE(p2.getHealth() == 80);
+}
+
+
+

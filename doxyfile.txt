@@ -7,4 +7,35 @@ OUTPUT_DIRECTORY       = docs
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
 
+#--------------------------------------------------------------------------- 
+# ¬’≤ƒÕ≤ ‘¿…À»
+#--------------------------------------------------------------------------- 
+
+INPUT                  = .
+FILE_PATTERNS          = *.cpp *.h *.hpp
+RECURSIVE              = YES
+
+#--------------------------------------------------------------------------- 
+# ƒŒƒ¿“ Œ¬≤ œ¿–¿Ã≈“–»
+#--------------------------------------------------------------------------- 
+
+EXTRACT_PRIVATE        = YES
+EXTRACT_PROTECTED      = YES
+EXTRACT_STATIC         = YES
+
+QUIET                  = NO
+WARNINGS               = YES
+
+# HTML
+HTML_OUTPUT            = html
+GENERATE_TREEVIEW      = YES
+USE_MATHJAX            = YES
+
+#--------------------------------------------------------------------------- 
+#  ŒÃ≈Õ“¿–≤ “¿ DOXYGEN
+#--------------------------------------------------------------------------- 
+
+JAVADOC_AUTOBRIEF      = YES
+MULTILINE_CPP_IS_BRIEF = YES
+
 
